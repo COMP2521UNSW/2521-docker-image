@@ -5,7 +5,8 @@ RUN apt update
 # LLVM -- Clang C compiler + debug tools
 # Make -- build system
 # SSH -- connect to CSE
-RUN apt -y install file less unzip zip llvm make ssh git
+# Rsync -- transfer files to/from CSE
+RUN apt -y install file less unzip zip llvm make ssh git rsync
 
 # Change to the 'ubuntu' user (created by the image)
 USER ubuntu
