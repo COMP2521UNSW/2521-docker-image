@@ -1,12 +1,12 @@
 FROM ubuntu:latest
 
 RUN apt update
-# file, less, unzip, zip, git -- Core programs
-# LLVM, Clang -- Clang C compiler + debug tools
-# Make -- build system
-# SSH -- connect to CSE
-# Rsync -- transfer files to/from CSE
-RUN apt -y install file less unzip zip llvm clang make ssh git rsync
+# CSE connection tools
+RUN apt install -y ssh git rsync
+# Build + debug tools
+RUN apt install -y make llvm clang
+# Core programs (installed last, since they are most likely to change)
+RUN apt install -y file less unzip zip time nano
 
 # Change to the 'ubuntu' user (created by the image)
 USER ubuntu
