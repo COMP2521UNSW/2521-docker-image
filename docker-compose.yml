@@ -9,13 +9,14 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     # Only allow 65k files per process (https://stackoverflow.com/a/31474407/6335363)
-    # By default, Docker has a limit of around 2 billion files, which is
+    # By default, Docker has a limit of around 1 billion files, which is
     # problematic as upon detecting errors, LLVM's sanitizers iterate through
     # all available file descriptors to close everything before exiting,
     # causing the process to hang for a few minutes.
     # See issue: https://github.com/llvm/llvm-project/issues/59112
     ulimits:
-      nofile: 65536
+      nofile: 524288
+    # Add the "ptrace" capability to allow for better debugging
     # https://stackoverflow.com/a/49735927/6335363
     cap_add:
       - "SYS_PTRACE"
