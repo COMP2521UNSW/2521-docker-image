@@ -1,0 +1,108 @@
+#!/bin/bash
+# Docker setup script
+#
+#
+
+# Echo to stderr
+echoerr() { echo "$@" 1>&2; }
+
+
+# Ensure environment contains required programs, and exit early if not
+check-env() {
+    # Docker
+    if ! command -v docker > /dev/null; then
+        echoerr "Error: Docker is not installed"
+        echoerr "Please install Docker Desktop by following the instrctions"
+        echoerr "on this site: https://docs.docker.com/get-docker/"
+        exit 1
+    fi
+
+    # TODO: Make sure this user is in the docker group, so that they can run
+    # docker commands without sudo
+    # TODO: Is this needed on MacOS? How does it work on Windows?
+}
+
+
+# Build docker image
+docker-setup() {
+    echoerr "Building docker image. This may take a few minutes..."
+    docker compose up --build --no-start
+}
+
+# Check for an existing SSH key, if there isn't one, make one
+ssh-key-setup() {
+    available_keys = "$(ls -l ~/.ssh/id_*.pub)"
+
+    if [ ! -n available_keys ]; then
+        echoerr "No SSH keys found, creating one..."
+
+        # Generate SSH key
+        # https://stackoverflow.com/a/43235320/6335363
+        # -q = quiet
+        # -t ed25519 = ed25519 key
+        # -f "~/.ssh/id_ed25519" = key output file
+        # -N "" = no password
+        # -C "COMP2521 Docker -> CSE" = comment
+        ssh-keygen -q -t ed25519 -f ~/.ssh/id_ed25519 -N ""
+    fi
+}
+
+# Set up access to CSE systems over SSH
+#
+# - Set up zID
+# - Set up SSH key
+# - Uses ssh-copy-id to copy it to CSE systems
+cse-setup () {
+
+    # Get their zID, and save it to `config/zid`
+    read -p "Enter your zID: " zid
+    echo "$zid" > "config/zid"
+
+    # Set up an SSH key if needed
+    ssh-key-setup
+
+    # Now copy it across to CSE
+    ssh-copy-id "$zid@login.cse.unsw.edu.au"
+
+    # Finally, link their SSH config to `config/ssh` so it can be used
+    # within the docker image
+    ln -s ~/.ssh ./config/ssh
+}
+
+# Add 2521 scripts to PATH
+add-scripts() {
+    scripts_dir="$(pwd)"
+    path_mod="export PATH=\"\$PATH:$scripts_dir\""
+    # Append to both bashrc and zshrc
+    # It'd probably be better to just do one of them but I can't be bothered
+    echo $path_mod >> ~/.bashrc
+    echo $path_mod >> ~/.zshrc
+}
+
+# Set up work directory
+work-setup() {
+    mkdir -p work
+}
+
+
+main() {
+    # cd to this folder (so that all the setup works correctly)
+    cd "$(dirname "$0")"
+
+    # Check environment is ok
+    check-env
+
+    # Add scripts to PATH
+    add-scripts
+
+    # Set up connection to CSE
+    cse-setup
+
+    # Set up work directory
+    work-setup
+
+    # Set up docker image
+    docker-setup
+}
+
+main

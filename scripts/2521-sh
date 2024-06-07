@@ -1,0 +1,11 @@
+#!/bin/bash
+# 2521-sh
+# Launch a Bash shell within the COMP2521 environment
+
+# cd to one above this script's directory
+cd "$(dirname "$0")/.."
+
+# TODO: Check that the image is running
+
+# Launch bash within the image
+docker compose exec cs2521 bash

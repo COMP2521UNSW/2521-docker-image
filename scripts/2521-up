@@ -1,0 +1,9 @@
+#!/bin/bash
+# 2521-up
+# Start the COMP2521 docker image, so that users can connect to it
+
+# cd to one above this script's directory
+cd "$(dirname "$0")/.."
+
+# And start it up
+docker compose up -d

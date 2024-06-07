@@ -1,0 +1,13 @@
+services:
+  cs2521:
+    build:
+      context: .
+      # Link SSH agent
+      ssh: ["default"]
+    hostname: cs2521
+    # https://stackoverflow.com/a/39150040/6335363
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    volumes:
+      - "./work:/home/ubuntu/work:rw"
+      - "./config/ssh:/home/ubuntu/.ssh:rw"
