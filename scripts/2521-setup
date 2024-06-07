@@ -71,7 +71,7 @@ cse-setup () {
 
 # Add 2521 scripts to PATH
 add-scripts() {
-    scripts_dir="$(pwd)"
+    scripts_dir="$(pwd)/scripts"
     path_mod="export PATH=\"\$PATH:$scripts_dir\""
     # Append to both bashrc and zshrc
     # It'd probably be better to just do one of them but I can't be bothered
@@ -81,13 +81,17 @@ add-scripts() {
 
 # Set up work directory
 work-setup() {
+    mkdir -p config
     mkdir -p work
 }
 
 
 main() {
     # cd to this folder (so that all the setup works correctly)
-    cd "$(dirname "$0")"
+    cd "$(dirname "$0")/.."
+
+    # Set up work directory
+    work-setup
 
     # Check environment is ok
     check-env
@@ -97,9 +101,6 @@ main() {
 
     # Set up connection to CSE
     cse-setup
-
-    # Set up work directory
-    work-setup
 
     # Set up docker image
     docker-setup
