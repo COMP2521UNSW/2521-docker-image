@@ -27,5 +27,12 @@ services:
     cap_add:
       - "SYS_PTRACE"
     volumes:
+      # Work directory, where work is completed
       - "./work:/home/ubuntu/work:rw"
+      # SSH config -- this must be mounted directly, since otherwise it'll just
+      # be a symlink to the external user's SSH config, which won't be
+      # accessible to the container.
       - "./config/ssh:/home/ubuntu/.ssh:rw"
+      # .2521-config, which symlinks to various files that should be preserved
+      # between rebuilds.
+      - "./config:/home/ubuntu/.2521-config:rw"

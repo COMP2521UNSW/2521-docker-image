@@ -17,9 +17,10 @@ USER ubuntu
 
 # Give a nice bash config, with some helper commands
 COPY --chown=ubuntu:ubuntu dot.bashrc /home/ubuntu/.bashrc
-# Link their zID
-COPY --chown=ubuntu:ubuntu ./config/zid /home/ubuntu/.zid
 
+# Set up .2521-config symlinks
+# Bash history
+RUN ln -s ~/.2521-config/bash_history ~/.bash_history
 
 WORKDIR /home/ubuntu/work
 

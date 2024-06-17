@@ -17,7 +17,7 @@ echo " --- COMP2521 Docker environment --- "
 
 _load_cse_env() {
     # Load their zID
-    export ZID=$(cat "$HOME/.zid")
+    export ZID=$(cat "$HOME/.2521-config/zid")
 
     # This is the URL for logging into CSE over SSH
     export CSE="${ZID}@login.cse.unsw.edu.au"
