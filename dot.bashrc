@@ -162,6 +162,7 @@ cse-fetch () {
     if [ -d "./starter_code" ]; then
         echoerr "A directory named 'starter_code' already exists!"
         echoerr "Please rename it to avoid losing work."
+        echoerr "Try: 'mv starter_code [new folder name]'"
         return 1
     fi
 
@@ -176,25 +177,24 @@ cse-fetch () {
 # Upload the current directory to a directory within `2521-push` in the
 # student's CSE account
 cse-push () {
-    cwd = $(pwd)
+    cwd=$(pwd)
 
     # We should only push directories within the user's $HOME
     # https://stackoverflow.com/a/68919129/6335363
-    if ! find "$HOME" -samefile "$cwd" -printf 'Y\n' -quit | grep -qF Y; then
-        echoerr "The directory '$cwd' is not part of your home directory, so"
-        echoerr "it cannot be uploaded to CSE."
+    if ! find "$HOME/work" -samefile "$cwd" -printf 'Y\n' -quit | grep -qF Y; then
+        echoerr "The directory '$cwd' is not part of your home/work "
+        echoerr "directory, so it cannot be uploaded to CSE."
         echoerr "Make sure you've cd'd into the right location."
         return 1
     fi
 
     # File relatively to $HOME/work directory
     # https://stackoverflow.com/a/62684116/6335363
-    out_dir = "2521-push/${cwd#"$HOME"/work}"
-
+    out_dir="/home/${ZID}/2521-push${cwd#"$HOME/work"}"
 
     # Check files don't already exist on CSE end
     # https://stackoverflow.com/a/29639982/6335363
-    if ssh $CSE "test -e /home/${ZID}/${out_dir}"; then
+    if ssh $CSE "test -e ${out_dir}"; then
         # your file exists
         echoerr "The directory '${out_dir}' already exists on CSE."
         echoerr -n "Replace it? [y/N] "
@@ -205,6 +205,11 @@ cse-push () {
         fi
     fi
 
+    echo "Uploading...: 'LOCAL:$cwd' -> 'CSE:$out_dir'"
+
+    # mkdir to the required location
+    ssh $CSE "mkdir -p $out_dir"
+
     # rsync it across
-    rsync -a $cwd $out_dir
+    rsync -arP $cwd/ "$CSE:$out_dir"
 }
