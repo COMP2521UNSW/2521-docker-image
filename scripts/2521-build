@@ -1,0 +1,10 @@
+#!/bin/bash
+# 2521-update
+# Update and rebuild the docker image
+
+# cd to one above this script's directory
+cd "$(dirname "$0")/.."
+
+# Rebuild the image
+echo "Building docker image. This may take a few minutes..."
+docker compose up --build --no-start
