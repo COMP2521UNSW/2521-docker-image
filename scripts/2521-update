@@ -1,6 +1,8 @@
 #!/bin/bash
 # 2521-update
 # Update and rebuild the docker image
+#
+# Author: Maddy Guthridge
 
 # cd to one above this script's directory
 cd "$(dirname "$0")/.."

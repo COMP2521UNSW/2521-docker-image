@@ -1,6 +1,8 @@
 # .bashrc -- this is the shell configuration for the Docker environment
 # This is mainly derived from Ubuntu's defaults, but with some extras to make
 # life easier
+#
+# Author: Maddy Guthridge
 
 # If not running interactively, don't do anything
 case $- in

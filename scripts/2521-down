@@ -1,6 +1,8 @@
 #!/bin/bash
 # 2521-down
 # Shut down the COMP2521 docker image
+#
+# Author: Maddy Guthridge
 
 # cd to one above this script's directory
 cd "$(dirname "$0")/.."

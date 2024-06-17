@@ -1,7 +1,11 @@
 #!/bin/bash
 # Docker setup script
 #
+# This sets up the 2521 docker image, and sets up an SSH connection to CSE
+# as well as adding the scripts in this directory to the user's $PATH, by
+# appending to their .zshrc and .bashrc
 #
+# Author: Maddy Guthridge
 
 # Echo to stderr
 echoerr() { echo "$@" 1>&2; }

@@ -1,3 +1,7 @@
+# Dockerfile
+# This is the build script for creating the docker image.
+#
+# Author: Maddy Guthridge
 FROM ubuntu:latest
 
 RUN apt update

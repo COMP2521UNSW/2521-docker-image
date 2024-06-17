@@ -1,6 +1,8 @@
 #!/bin/bash
 # 2521-sh
 # Launch a Bash shell within the COMP2521 environment
+#
+# Author: Maddy Guthridge
 
 # cd to one above this script's directory
 cd "$(dirname "$0")/.."
