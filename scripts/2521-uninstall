@@ -1,0 +1,50 @@
+#!/bin/bash
+# 2521-uninstall
+# Uninstall the 2521 image from the system.
+#
+# * Removes the docker image
+# * Remove entries from .bashrc and .zshrc
+# * Reminds the user to back up their work
+# * Displays instructions on finishing the removal of
+#   the git repo
+#
+# Author: Maddy Guthridge
+
+# cd to one above this script's directory
+cd "$(dirname "$0")/.."
+
+echo "WARNING! This script will uninstall the 2521 Docker image!"
+echo -n "Continue? [y/N] "
+if [[ "$(read -e; echo $REPLY)" == [Yy]* ]]; then
+    echo "Continuing..."
+else
+    echo "Cancelled."
+    exit 1
+fi
+
+echo "Removing docker image..."
+docker compose rm -s
+
+echo "Removing scripts from PATH..."
+
+# Removes the script from the path for the given file,
+# using the anchor comment to find the right spot
+rm_from_path() {
+    comment='# 2521 Docker Scripts'
+    # https://stackoverflow.com/a/53980091/6335363
+    sed -i -e "/$comment/{N;d;}" $1
+}
+rm_from_path ~/.bashrc
+rm_from_path ~/.zshrc
+
+echo "!!! IMPORTANT !!!"
+echo "The final stage of uninstalling will delete any work"
+echo "associated with the 2521 Docker image!"
+echo "To keep it, create a backup of the work directory"
+echo "found at '$PWD/work'."
+echo
+echo "Once you have backed up your work, run this command to"
+echo "permanently remove this software:"
+echo
+echo "    cd $(dirname $PWD) && rm -rf $(basename $PWD)"
+echo

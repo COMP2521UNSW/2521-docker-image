@@ -89,12 +89,4 @@ You can start an SSH session by running the `cse` command.
 
 ## Uninstalling
 
-1. Remove the image by running `docker compose rm -s`
-
-2. Remove the scripts from your `$PATH` variable by modifying your `~/.bashrc`
-   and `~/.zshrc` configuration files.
-
-3. Back up your COMP2521 work by creating a copy of the `work` directory
-   outside of the Docker environment.
-
-4. Delete the folder that you `git clone`d.
+Run `2521-uninstall` and follow its prompts.
