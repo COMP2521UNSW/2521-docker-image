@@ -33,6 +33,22 @@ docker-setup() {
     docker compose up --build --no-start
 }
 
+# On Windows, the SSH agent isn't started in Git Bash by default, meaning that
+# Docker builds don't seem to work properly.
+# Append `fix-ssh-agent` to the .bashrc if there is no SSH agent already
+windows-fix-ssh-agent() {
+    # Only Windows
+    if [[ "$OSTYPE" == "msys" ]]; then
+        if [[ -z "${SSH_AUTH_SOCK}" ]]; then
+            # SSH auth socket not set up
+            # Copy extras/fix-ssh-agent into bashrc
+            cat ./extras/fix-ssh-agent >> ~/.bashrc
+            echo "Fixed SSH agent set up, please restart your terminal"
+            exit 1
+        fi
+    fi
+}
+
 # Check for an existing SSH key, if there isn't one, make one
 ssh-key-setup() {
     available_keys="$(ls -l ~/.ssh/id_*.pub)"
@@ -57,6 +73,7 @@ ssh-key-setup() {
 # - Set up SSH key
 # - Uses ssh-copy-id to copy it to CSE systems
 cse-setup () {
+    windows-fix-ssh-agent
 
     # Get their zID, and save it to `config/zid`
     read -p "Enter your zID: " zid
@@ -79,11 +96,16 @@ add-scripts() {
     # IMPORTANT: This comment is used to manage the uninstall process
     # so any changes to it may break the uninstall script
     comment='# 2521 Docker Scripts'
-    path_mod=$(printf '%q\nexport PATH="$PATH:%q"\n' "$comment" "$scripts_dir")
-    # Append to both bashrc and zshrc
-    # It'd probably be better to just do one of them but I can't be bothered
-    echo $path_mod >> ~/.bashrc
-    echo $path_mod >> ~/.zshrc
+    path_mod=$(printf "%s\\\\nexport PATH=\"\$PATH:%q\"\n" "$comment" "$scripts_dir")
+    # Append to bashrc and zshrc
+    bash_path=$(which bash 2> /dev/null)
+    if [[ -n $bash_path ]]; then
+        echo -e $path_mod >> ~/.bashrc
+    fi
+    zsh_path=$(which zsh 2> /dev/null)
+    if [[ -n $zsh_path ]]; then
+        echo -e $path_mod >> ~/.zshrc
+    fi
 }
 
 # Set up work directory
