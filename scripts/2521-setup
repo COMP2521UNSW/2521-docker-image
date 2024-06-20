@@ -35,7 +35,7 @@ docker-setup() {
 
 # Check for an existing SSH key, if there isn't one, make one
 ssh-key-setup() {
-    available_keys = "$(ls -l ~/.ssh/id_*.pub)"
+    available_keys="$(ls -l ~/.ssh/id_*.pub)"
 
     if [ ! -n available_keys ]; then
         echoerr "No SSH keys found, creating one..."
