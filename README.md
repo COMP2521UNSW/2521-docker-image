@@ -78,14 +78,15 @@ You can start an SSH session by running the `cse` command.
   user's `~/.ssh` directory is symlinked to `config/ssh`. At runtime, this is
   added as a Docker volume mounted at `~/.ssh` in the environment.
 
-* In addition, during setup, the user's zID is stored to `config/zid`. This is
+* In addition, during setup, the user's zID is stored to `home/.zid`. This is
   used to configure the `cse*` commands within the environment.
 
 ### Storing work
 
-* A `work` directory is created at the root of this repo during setup.
+* A `home` directory is created at the root of this repo during setup.
 
-* This is added to the environment as a Docker volume mounted at `~/work`.
+* This is added to the environment as a Docker volume mounted on their home
+  directory.
 
 ## Uninstalling
 
