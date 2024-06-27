@@ -8,6 +8,7 @@
 cd "$(dirname "$0")/.."
 
 # Export group ID and user ID so that volumes can be attached properly
-export UID GID
+export UID=$(id -u)
+export GID=$(id -g)
 # And start it up
 docker compose up -d

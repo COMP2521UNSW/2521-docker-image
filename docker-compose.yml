@@ -10,6 +10,9 @@ services:
       context: .
       # Link SSH agent
       ssh: ["default"]
+      args:
+        - "UID=${UID}"
+        - "GID=${GID}"
     hostname: cs2521
     # https://stackoverflow.com/a/39150040/6335363
     stdin_open: true # docker run -i
@@ -26,12 +29,11 @@ services:
     # https://stackoverflow.com/a/49735927/6335363
     cap_add:
       - "SYS_PTRACE"
-    user: "${UID}"
     volumes:
       # Home directory, to preserve all files between rebuilds
-      - "./home:/home/ubuntu:rw"
+      - "./home:/home/me:rw"
       # SSH config -- mounted separately so that the SSH keys can be accessed.
       # Despite this being within the above mount point, docker is able to
       # figure things out, so it'll be ok.
       # https://stackoverflow.com/a/55348060/6335363
-      - "./config/ssh:/home/ubuntu/.ssh:rw"
+      - "./config/ssh:/home/me/.ssh:rw"

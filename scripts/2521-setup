@@ -27,10 +27,7 @@ check-env() {
 
 # Build docker image
 docker-setup() {
-    echo "Building docker image. This may take a few minutes..."
-    # Export group ID and user ID so that volumes can be attached properly
-    export UID GID
-    docker compose up --build --no-start
+    ./scripts/2521-build
 }
 
 # On Windows, the SSH agent isn't started in Git Bash by default, meaning that
@@ -97,8 +94,9 @@ cse-setup () {
     echo "Linking SSH config to Docker image..."
     if [[ ! -d "./config/ssh" ]]; then
         # -s = symbolic
-        # -T = link directly to target (don't create a directory inside target)
-        ln -sT "~/.ssh" "./config/ssh"
+        ln -s "$HOME/.ssh" "./config/ssh"
+    else
+        echo "./config/ssh already exists, skipping"
     fi
 }
 
@@ -106,7 +104,8 @@ cse-setup () {
 add-scripts() {
     echo "Adding 2521 scripts to PATH variable..."
     # Only add if not already present
-    if ! command -v 2521-setup > /dev/null; then
+    scripts_path=$(which 2521-setup 2> /dev/null)
+    if [[ -n $scripts_path ]]; then
         echo "Scripts already added to PATH variable, skipping"
         return
     fi
@@ -133,7 +132,9 @@ work-setup() {
     mkdir -p config
     # Copy across any important files
     # Course bash config
-    cp "./dot.bashrc" "./home/.bashrc"
+    cp "./dotfiles/dot.bashrc" "./home/.bashrc"
+    # Profile config (ensure bashrc executed on login)
+    cp "./dotfiles/dot.profile" "./home/.profile"
 }
 
 
@@ -157,6 +158,9 @@ main() {
 
     # Set up docker image
     docker-setup
+
+    echo "Setup completed successfully!"
+    echo "Restart your terminal to get the 2521-* commands"
 }
 
 main

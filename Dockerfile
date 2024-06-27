@@ -4,6 +4,9 @@
 # Author: Maddy Guthridge
 FROM ubuntu:latest
 
+ARG UID=1000
+ARG GID=1000
+
 RUN apt update
 # CSE connection tools
 RUN apt install -y ssh git rsync
@@ -12,9 +15,11 @@ RUN apt install -y make llvm clang clangd
 # Core programs (installed last, since they are most likely to change)
 RUN apt install -y file less unzip zip time nano
 
-# Change to the 'ubuntu' user (created by the image)
-USER ubuntu
+RUN groupadd -g ${GID} -o "me"
+RUN useradd -m -u ${UID} -g ${GID} -o -s /bin/bash "me"
 
-WORKDIR /home/ubuntu
+# Copy entrypoint script
+COPY "entrypoint.sh" "/root/entrypoint.sh"
 
-CMD [ "bash" ]
+# Run entrypoint script
+CMD [ "sleep", "infinity" ]

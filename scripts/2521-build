@@ -9,4 +9,6 @@ cd "$(dirname "$0")/.."
 
 # Rebuild the image
 echo "Building docker image. This may take a few minutes..."
+export UID
+export GID=$(id -g)
 docker compose up --build --no-start

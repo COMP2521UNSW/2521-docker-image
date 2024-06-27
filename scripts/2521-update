@@ -11,5 +11,4 @@ cd "$(dirname "$0")/.."
 git pull
 
 # Rebuild the image
-echo "Building docker image. This may take a few minutes..."
-docker compose up --build --no-start
+./scripts/2521-build
