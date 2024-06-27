@@ -11,5 +11,9 @@ pull request if you'd like to help out!
 
 2. Install [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/).
 
-3. Run the setup script -- it may prompt you to restart your terminal if your
+3. Launch a "Git Bash" terminal.
+
+4. `git clone` the repo.
+
+5. Run the setup script -- it may prompt you to restart your terminal if your
    SSH agent isn't set up.
