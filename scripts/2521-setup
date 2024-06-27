@@ -7,17 +7,15 @@
 #
 # Author: Maddy Guthridge
 
-# Echo to stderr
-echoerr() { echo "$@" 1>&2; }
-
 
 # Ensure environment contains required programs, and exit early if not
 check-env() {
+    echo "Checking all required dependencies are installed..."
     # Docker
     if ! command -v docker > /dev/null; then
-        echoerr "Error: Docker is not installed"
-        echoerr "Please install Docker Desktop by following the instrctions"
-        echoerr "on this site: https://docs.docker.com/get-docker/"
+        echo "Error: Docker is not installed"
+        echo "Please install Docker Desktop by following the instrctions"
+        echo "on this site: https://docs.docker.com/get-docker/"
         exit 1
     fi
 
@@ -29,7 +27,7 @@ check-env() {
 
 # Build docker image
 docker-setup() {
-    echoerr "Building docker image. This may take a few minutes..."
+    echo "Building docker image. This may take a few minutes..."
     # Export group ID and user ID so that volumes can be attached properly
     export UID GID
     docker compose up --build --no-start
@@ -53,10 +51,11 @@ windows-fix-ssh-agent() {
 
 # Check for an existing SSH key, if there isn't one, make one
 ssh-key-setup() {
+    echo "Checking for SSH keys..."
     available_keys="$(ls -l ~/.ssh/id_*.pub)"
 
     if [ ! -n available_keys ]; then
-        echoerr "No SSH keys found, creating one..."
+        echo "No SSH keys found, creating one..."
 
         # Generate SSH key
         # https://stackoverflow.com/a/43235320/6335363
@@ -75,28 +74,40 @@ ssh-key-setup() {
 # - Set up SSH key
 # - Uses ssh-copy-id to copy it to CSE systems
 cse-setup () {
+    echo "Setting up connection to CSE..."
     windows-fix-ssh-agent
 
     # Get their zID, and save it to `config/zid`
-    read -p "Enter your zID: " zid
-    echo "$zid" > "./home/.zid"
+    if [[ ! -f "./home/.zid" ]]; then
+        read -p "Enter your zID: " zid
+        echo "$zid" > "./home/.zid"
+    else
+        zid=$(cat "./home/.zid")
+    fi
 
     # Set up an SSH key if needed
     ssh-key-setup
 
     # Now copy it across to CSE
+    echo "Copying SSH key to CSE..."
     ssh-copy-id "$zid@login.cse.unsw.edu.au"
 
     # Finally, link their SSH config to `config/ssh` so it can be used
     # within the docker image
-    ln -s ~/.ssh ./config/ssh
+    echo "Linking SSH config to Docker image..."
+    if [[ ! -d "./config/ssh" ]]; then
+        # -s = symbolic
+        # -T = link directly to target (don't create a directory inside target)
+        ln -sT "~/.ssh" "./config/ssh"
+    fi
 }
 
 # Add 2521 scripts to PATH
 add-scripts() {
+    echo "Adding 2521 scripts to PATH variable..."
     # Only add if not already present
     if ! command -v 2521-setup > /dev/null; then
-        echoerr "Scripts already added to PATH variable, skipping"
+        echo "Scripts already added to PATH variable, skipping"
         return
     fi
     scripts_dir="$PWD/scripts"
@@ -117,17 +128,20 @@ add-scripts() {
 
 # Set up required directories
 work-setup() {
+    echo "Setting up working directories"
     mkdir -p home
     mkdir -p config
     # Copy across any important files
     # Course bash config
-    cp -i "./dot.bashrc" "./home/.bashrc"
+    cp "./dot.bashrc" "./home/.bashrc"
 }
 
 
 main() {
     # cd to repo root folder (so that all the setup works correctly)
     cd "$(dirname "$0")/.."
+
+    echo "COMP2521 Docker Image setup"
 
     # Set up work directory
     work-setup
