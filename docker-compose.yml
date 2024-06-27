@@ -26,13 +26,11 @@ services:
     # https://stackoverflow.com/a/49735927/6335363
     cap_add:
       - "SYS_PTRACE"
+    user: "${UID}"
     volumes:
-      # Work directory, where work is completed
-      - "./work:/home/ubuntu/work:rw"
-      # SSH config -- this must be mounted directly, since otherwise it'll just
-      # be a symlink to the external user's SSH config, which won't be
-      # accessible to the container.
+      # Home directory, to preserve all files between rebuilds
+      - "./home:/home/ubuntu:rw"
+      # SSH config -- mounted separately so that the SSH keys can be accessed.
+      # Despite this being within the above mount point, docker is able to
+      # figure things out, so it'll be ok.
       - "./config/ssh:/home/ubuntu/.ssh:rw"
-      # .2521-config, which symlinks to various files that should be preserved
-      # between rebuilds.
-      - "./config:/home/ubuntu/.2521-config:rw"
