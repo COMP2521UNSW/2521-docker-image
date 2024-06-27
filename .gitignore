@@ -1,5 +1,5 @@
 # Config directory
 config/
 
-# Work directory
-work/
+# Image home directory
+home/

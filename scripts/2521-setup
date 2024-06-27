@@ -22,14 +22,16 @@ check-env() {
     fi
 
     # TODO: Make sure this user is in the docker group, so that they can run
-    # docker commands without sudo
-    # TODO: Is this needed on MacOS? How does it work on Windows?
+    # docker commands without sudo on Linux
+    # TODO: Is this needed on MacOS?
 }
 
 
 # Build docker image
 docker-setup() {
     echoerr "Building docker image. This may take a few minutes..."
+    # Export group ID and user ID so that volumes can be attached properly
+    export UID GID
     docker compose up --build --no-start
 }
 
@@ -77,7 +79,7 @@ cse-setup () {
 
     # Get their zID, and save it to `config/zid`
     read -p "Enter your zID: " zid
-    echo "$zid" > "config/zid"
+    echo "$zid" > "./home/.zid"
 
     # Set up an SSH key if needed
     ssh-key-setup
@@ -92,12 +94,17 @@ cse-setup () {
 
 # Add 2521 scripts to PATH
 add-scripts() {
+    # Only add if not already present
+    if ! command -v 2521-setup > /dev/null; then
+        echoerr "Scripts already added to PATH variable, skipping"
+        return
+    fi
     scripts_dir="$PWD/scripts"
     # IMPORTANT: This comment is used to manage the uninstall process
     # so any changes to it may break the uninstall script
     comment='# 2521 Docker Scripts'
     path_mod=$(printf "%s\\\\nexport PATH=\"\$PATH:%q\"\n" "$comment" "$scripts_dir")
-    # Append to bashrc and zshrc
+    # Append to bashrc and zshrc, only if bash/zsh are installed
     bash_path=$(which bash 2> /dev/null)
     if [[ -n $bash_path ]]; then
         echo -e $path_mod >> ~/.bashrc
@@ -108,15 +115,18 @@ add-scripts() {
     fi
 }
 
-# Set up work directory
+# Set up required directories
 work-setup() {
+    mkdir -p home
     mkdir -p config
-    mkdir -p work
+    # Copy across any important files
+    # Course bash config
+    cp -i "./dot.bashrc" "./home/.bashrc"
 }
 
 
 main() {
-    # cd to this folder (so that all the setup works correctly)
+    # cd to repo root folder (so that all the setup works correctly)
     cd "$(dirname "$0")/.."
 
     # Set up work directory

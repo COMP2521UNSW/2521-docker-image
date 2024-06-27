@@ -29,6 +29,8 @@ echo "Removing scripts from PATH..."
 
 # Removes the script from the path for the given file,
 # using the anchor comment to find the right spot
+# FIXME: Honestly kinda jank, need a better way (perhaps a GetSet script if I
+# end up making that for COMP1010?)
 rm_from_path() {
     comment='# 2521 Docker Scripts'
     # https://stackoverflow.com/a/53980091/6335363
@@ -40,8 +42,9 @@ rm_from_path ~/.zshrc
 echo "!!! IMPORTANT !!!"
 echo "The final stage of uninstalling will delete any work"
 echo "associated with the 2521 Docker image!"
-echo "To keep it, create a backup of the work directory"
-echo "found at '$PWD/work'."
+echo "To keep it, create a backup of any files you need"
+echo "from your Docker home directory, found at "
+echo "'$PWD/home'."
 echo
 echo "Once you have backed up your work, run this command to"
 echo "permanently remove this software:"
