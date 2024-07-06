@@ -11,7 +11,9 @@ pull request if you'd like to help out!
 
 3. Launch a terminal.
 
-4. `git clone` the repo.
+4. Download the project by running `git clone https://github.com/MaddyGuthridge/2521-docker-image.git`.
+   The image will download to your current terminal directory, so ensure you
+   run this in a safe location (to avoid data loss).
 
-5. Run the setup script and follow its prompts. From the directory you cloned,
-   you can run `./scripts/setup`.
+5. Run the setup script and follow its prompts. You can run
+   `cd 2521-docker-image` then `./scripts/setup`.
