@@ -1,5 +1,7 @@
 #!/bin/bash
-# fix-permissions
+# fix-permissions.sh
+#
+# Placed at /root/fix-permissions.sh
 #
 # Entrypoint script that corrects permissions for files so that
 # files are readable and writable.

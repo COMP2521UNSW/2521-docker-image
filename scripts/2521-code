@@ -14,6 +14,6 @@ containerid=$(docker ps -aqf "name=docker-cs2521")
 # https://stackoverflow.com/a/46760046/6335363
 hexid=$(echo -n "$(docker ps -aqf "name=docker-cs2521")" | od -A n -t x1 | sed 's/ *//g')
 
-# Attach to container
+# Attach to container, forwarding args to code executable
 # https://cspotcode.com/posts/attach-vscode-to-container-from-cli
-code --remote="attached-container+${hexid}"
+code --remote="attached-container+${hexid}" $@
