@@ -8,7 +8,7 @@ pull request if you'd like to help out!
 
 2. Install the [Docker Engine](https://docs.docker.com/engine/install/#supported-platforms).
    Be sure you are installing the engine, and not the desktop app (which will
-   not work with the given scripts).
+   likely not work with the given scripts).
 
 3. Ensure your user is a member of the docker group by running
    `sudo gpasswd -a $USER docker`.

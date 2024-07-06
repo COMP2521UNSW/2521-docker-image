@@ -4,6 +4,10 @@
 # Author: Maddy Guthridge
 FROM ubuntu:latest
 
+# Remove the ubuntu user to prevent uid clashes on Linux
+# https://bugs.launchpad.net/cloud-images/+bug/2005129/comments/2
+RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
+
 ARG UID=1000
 ARG GID=1000
 
