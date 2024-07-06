@@ -10,5 +10,13 @@ cd "$(dirname "$0")/.."
 # Export group ID and user ID so that volumes can be attached properly
 export UID=$(id -u)
 export GID=$(id -g)
+
 # And start it up
 docker compose up -d
+
+# Fix file permissions
+# Prevent it from running in git bash (YIKES)
+# Source: https://gist.github.com/borekb/cb1536a3685ca6fc0ad9a028e6a959e3
+export MSYS_NO_PATHCONV=1
+# Run entrypoint script as root
+docker compose exec -u root cs2521 "bash" "/root/fix-permissions.sh"

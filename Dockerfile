@@ -19,11 +19,14 @@ RUN apt install -y make llvm clang clangd
 # Core programs (installed last, since they are most likely to change)
 RUN apt install -y file less unzip zip time nano
 
+# Copy entrypoint script
+COPY "container-scripts/fix-permissions.sh" "/root/fix-permissions.sh"
+
+# Create, then switch to "me" user, where students can do their work
 RUN groupadd -g ${GID} -o "me"
 RUN useradd -m -u ${UID} -g ${GID} -o -s /bin/bash "me"
+USER me
+WORKDIR /home/me
 
-# Copy entrypoint script
-COPY "entrypoint.sh" "/root/entrypoint.sh"
-
-# Run entrypoint script
+# Now leave it doing nothing
 CMD [ "sleep", "infinity" ]

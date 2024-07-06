@@ -12,7 +12,5 @@ cd "$(dirname "$0")/.."
 # Launch bash within the image
 export UID
 export GID=$(id -g)
-# Prevent it from running in git bash (YIKES)
-# Source: https://gist.github.com/borekb/cb1536a3685ca6fc0ad9a028e6a959e3
-export MSYS_NO_PATHCONV=1
-docker compose exec cs2521 "bash" "/root/entrypoint.sh"
+# Run entrypoint script as root
+docker compose exec cs2521 "bash"
