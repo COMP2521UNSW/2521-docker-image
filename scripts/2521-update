@@ -12,3 +12,6 @@ git pull
 
 # Rebuild the image
 ./scripts/2521-build
+
+# TODO: Quality of life, automatically restart the image after building, only
+# if it was running before
