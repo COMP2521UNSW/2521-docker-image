@@ -16,7 +16,7 @@ pull request if you'd like to help out!
 4. Ensure the Docker service is enabled. On most systems, you'll need to run
    `sudo systemctl enable --now docker`.
 
-5. Download the project by running `git clone https://github.com/MaddyGuthridge/2521-docker-image.git`.
+5. Download the project by running `git clone https://github.com/COMP2521UNSW/2521-docker-image.git`.
    The image will download to your current terminal directory, so ensure you
    run this in a safe location (to avoid data loss).
 

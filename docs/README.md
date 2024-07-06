@@ -1,6 +1,6 @@
 # COMP2521 Docker Image
 
-[View the project on GitHub](https://github.com/MaddyGuthridge/2521-docker-image).
+[View the project on GitHub](https://github.com/COMP2521UNSW/2521-docker-image).
 
 This is an experimental docker image for COMP2521, intended to allow students
 to complete their work locally.

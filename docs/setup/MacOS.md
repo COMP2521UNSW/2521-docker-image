@@ -11,7 +11,7 @@ pull request if you'd like to help out!
 
 3. Launch a terminal.
 
-4. Download the project by running `git clone https://github.com/MaddyGuthridge/2521-docker-image.git`.
+4. Download the project by running `git clone https://github.com/COMP2521UNSW/2521-docker-image.git`.
    The image will download to your current terminal directory, so ensure you
    run this in a safe location (to avoid data loss).
 
