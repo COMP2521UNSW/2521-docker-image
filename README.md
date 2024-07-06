@@ -1,11 +1,11 @@
-# COMP2521 Docker Image
+# [COMP2521 Docker Image](https://maddyguthridge.github.io/2521-docker-image/)
 
 This is an experimental docker image for COMP2521, intended to allow students
 to complete their work locally.
 
 ## Setup
 
-See [the documentation](./docs/setup/README.md).
+See [the documentation](https://maddyguthridge.github.io/2521-docker-image/setup/).
 
 ## Usage
 
