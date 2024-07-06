@@ -8,7 +8,7 @@
 cd "$(dirname "$0")/.."
 
 # Export group ID and user ID so that volumes can be attached properly
-export UID=$(id -u)
+export UID
 export GID=$(id -g)
 
 # And start it up
