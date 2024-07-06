@@ -133,7 +133,7 @@ mkcdir ()
 # cd then ls
 cdl ()
 {
-    cd -P -- "$1"
+    cd -P -- "$1" &&
     ls
 }
 
@@ -143,6 +143,9 @@ echoerr() { echo "$@" 1>&2; }
 # Connecting to CSE systems
 ###############################################################################
 
+# Set up ssh-agent
+eval $(ssh-agent) 2> /dev/null
+
 # SSH into CSE systems
 cse() {
     ssh $CSE
@@ -151,12 +154,12 @@ cse() {
 # Grab starter code from CSE. This will unzip it into a directory named
 # 'starter_code'
 cse-fetch () {
-    # Check if we're within the `~/work` directory. Changes outside of that dir
+    # Check if we're within the $HOME directory. Changes outside of that dir
     # will be lost
-    if test "${PWD##/home/ubuntu/work}" = "${PWD}"; then
-        echoerr "You are not in the '~/work' directory, meaning your data may"
+    if test "${PWD##/home/me}" = "${PWD}"; then
+        echoerr "You are not in your home directory, meaning your data may"
         echoerr "be lost when you shut down the environment."
-        echoerr "Please cd to a directory within '~/work' to avoid losing data."
+        echoerr "Please cd to a directory within '$HOME' to avoid losing data."
         return 1
     fi
 
@@ -169,9 +172,9 @@ cse-fetch () {
     fi
 
     # Download from CSE
-    rsync "$CSE":"$1" ".temp.zip"
+    rsync "$CSE":"$1" ".temp.zip" &&
     # Unzip
-    unzip ".temp.zip" -d "starter_code"
+    unzip ".temp.zip" -d "starter_code" &&
     # Remove the zip file
     rm ".temp.zip"
 }
@@ -183,8 +186,8 @@ cse-push () {
 
     # We should only push directories within the user's $HOME
     # https://stackoverflow.com/a/68919129/6335363
-    if ! find "$HOME/work" -samefile "$cwd" -printf 'Y\n' -quit | grep -qF Y; then
-        echoerr "The directory '$cwd' is not part of your home/work "
+    if ! find "$HOME" -samefile "$cwd" -printf 'Y\n' -quit | grep -qF Y; then
+        echoerr "The directory '$cwd' is not part of your home "
         echoerr "directory, so it cannot be uploaded to CSE."
         echoerr "Make sure you've cd'd into the right location."
         return 1
@@ -192,7 +195,7 @@ cse-push () {
 
     # File relatively to $HOME/work directory
     # https://stackoverflow.com/a/62684116/6335363
-    out_dir="/home/${ZID}/2521-push${cwd#"$HOME/work"}"
+    out_dir="/home/${ZID}/2521-push${cwd#"$HOME"}"
 
     # Check files don't already exist on CSE end
     # https://stackoverflow.com/a/29639982/6335363
