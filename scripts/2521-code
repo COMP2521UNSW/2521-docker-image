@@ -21,4 +21,6 @@ hexid=$(echo -n "$containerid" | od -A n -t x1 | sed 's/ *//g')
 
 # Attach to container, forwarding args to code executable
 # https://cspotcode.com/posts/attach-vscode-to-container-from-cli
-code --remote="attached-container+${hexid}" $@
+# This needs to be in a new window, otherwise, it quits immediately on MacOS
+# if a local VS Code is running
+code -n --remote="attached-container+${hexid}" $@
