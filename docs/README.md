@@ -5,7 +5,7 @@ to complete their work locally.
 
 ## Setup
 
-See [the documentation](./docs/setup/README.md).
+See [the documentation](./setup/README.md).
 
 ## Usage
 

@@ -15,5 +15,6 @@ pull request if you'd like to help out!
 
 4. `git clone` the repo.
 
-5. Run the setup script -- it may prompt you to restart your terminal if your
-   SSH agent isn't set up.
+5. Run the setup script and follow its prompts. From the directory you cloned,
+   you can run `./scripts/setup`. You may need to restart your terminal during
+   the setup process if the SSH agent wasn't configured correctly.

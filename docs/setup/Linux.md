@@ -10,7 +10,7 @@ pull request if you'd like to help out!
    Be sure you are installing the engine, and not the desktop app (which will
    likely not work with the given scripts).
 
-3. Ensure your user is a member of the docker group by running
+3. Ensure your user is a member of the "docker" group by running
    `sudo gpasswd -a $USER docker`.
 
 4. Ensure the Docker service is enabled. On most systems, you'll need to run
@@ -18,4 +18,5 @@ pull request if you'd like to help out!
 
 5. `git clone` the repo.
 
-6. Run the setup script and follow its prompts.
+6. Run the setup script and follow its prompts. From the directory you cloned,
+   you can run `./scripts/setup`.
