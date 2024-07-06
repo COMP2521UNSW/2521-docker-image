@@ -31,7 +31,6 @@ docker-setup() {
 }
 
 # Set up VS Code so it can work nicely with the image
-# Requires image to be built so that VS Code's server
 code-setup() {
     code_path=$(which code 2> /dev/null)
     if [[ -n $code_path ]]; then
