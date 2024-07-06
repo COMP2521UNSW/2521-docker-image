@@ -11,9 +11,9 @@ cd "$(dirname "$0")/.."
 # Grab container ID
 # https://stackoverflow.com/a/34497614/6335363
 # No need for sudo, sincer user should be added to Docker group
-containerid=$(docker ps -aqf "name=docker-cs2521")
+containerid=$(docker ps -aqf "name=cs2521")
 if [[ ! -n $containerid ]]; then
-    echo "Looks like the docker-cs2521 container isn't running."
+    echo "Looks like the cs2521 container isn't running."
     echo "Start it by running 2521-up"
     exit 1
 fi
