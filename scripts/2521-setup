@@ -14,12 +14,12 @@ RESET='\e[0m'
 PROMPT="$LILAC [2521-setup]$RESET "
 
 output() {
-    echo -en "$PROMPT "
+    printf "$PROMPT "
     echo $@
 }
 
 error() {
-    echo -en "$PROMPT $RED"
+    printf "$PROMPT $RED"
     echo $@ "$RESET"
 }
 

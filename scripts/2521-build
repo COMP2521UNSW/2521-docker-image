@@ -4,11 +4,17 @@
 #
 # Author: Maddy Guthridge
 
+# Colour codes yoinked from: https://unix.stackexchange.com/a/174/161355
+LILAC='\e[1;35m'
+RED='\e[0;31m'
+RESET='\e[0m'
+PROMPT="$LILAC [2521-build]$RESET "
+
 # cd to one above this script's directory
-cd "$(dirname "$0")/.."
+cd $(dirname "$0")/..
 
 # Rebuild the image
-echo "Building docker image. This may take a few minutes..."
+printf "$PROMPT Building docker image. This may take a few minutes...\n"
 export UID
 export GID=$(id -g)
 docker compose up --build --no-start
