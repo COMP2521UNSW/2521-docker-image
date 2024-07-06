@@ -144,7 +144,7 @@ echoerr() { echo "$@" 1>&2; }
 ###############################################################################
 
 # Set up ssh-agent
-eval $(ssh-agent) 2> /dev/null
+eval $(ssh-agent) > /dev/null
 
 # SSH into CSE systems
 cse() {
