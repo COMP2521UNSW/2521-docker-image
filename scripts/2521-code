@@ -1,0 +1,19 @@
+#!/bin/bash
+# 2521-code
+# Launch the running docker image in VS Code
+#
+# Author: Maddy Guthridge
+
+# TODO: Check that the image is running
+
+# Grab container ID
+# https://stackoverflow.com/a/34497614/6335363
+# No need for sudo, sincer user should be added to Docker group
+containerid=$(docker ps -aqf "name=docker-cs2521")
+# Convert it to hex
+# https://stackoverflow.com/a/46760046/6335363
+hexid=$(echo -n "$(docker ps -aqf "name=docker-cs2521")" | od -A n -t x1 | sed 's/ *//g')
+
+# Attach to container
+# https://cspotcode.com/posts/attach-vscode-to-container-from-cli
+code --remote="attached-container+${hexid}"
