@@ -7,15 +7,31 @@
 #
 # Author: Maddy Guthridge
 
+# Colour codes yoinked from: https://unix.stackexchange.com/a/174/161355
+LILAC='\e[1;35m'
+RED='\e[0;31m'
+RESET='\e[0m'
+PROMPT="$LILAC [2521-setup]$RESET "
+
+output() {
+    echo -en "$PROMPT "
+    echo $@
+}
+
+error() {
+    echo -en "$PROMPT $RED"
+    echo $@ "$RESET"
+}
+
 
 # Ensure environment contains required programs, and exit early if not
 check-env() {
-    echo "[2521-setup]  Checking all required dependencies are installed..."
+    output "Checking all required dependencies are installed..."
     # Docker
     if ! command -v docker > /dev/null; then
-        echo "[2521-setup]  Error: Docker is not installed"
-        echo "[2521-setup]  Please install Docker Desktop by following the instrctions"
-        echo "[2521-setup]  on this site: https://docs.docker.com/get-docker/"
+        error "Error: Docker is not installed"
+        error "Please install Docker Desktop by following the instrctions"
+        error "on this site: https://docs.docker.com/get-docker/"
         exit 1
     fi
 
@@ -34,14 +50,14 @@ docker-setup() {
 code-setup() {
     code_path=$(which code 2> /dev/null)
     if [[ -n $code_path ]]; then
-        echo "[2521-setup]  Setting up VS Code..."
+        output "Setting up VS Code..."
         # Install dev containers extension
         code --install-extension "ms-vscode-remote.remote-containers"
         # Doesn't seem possible to easily set up extensions from outside of the
         # container, so we'll leave this up to the students
         # If you can get it working, please create a PR
     else
-        echo "[2521-setup]  Warning: VS Code not found in path. Not setting up."
+        error "Warning: VS Code not found in path. Not setting up."
     fi
 }
 
@@ -55,7 +71,7 @@ windows-fix-ssh-agent() {
             # SSH auth socket not set up
             # Copy extras/fix-ssh-agent into bashrc
             cat ./extras/fix-ssh-agent >> ~/.bashrc
-            echo "[2521-setup]  Fixed SSH agent set up, please restart your terminal"
+            error "Fixed SSH agent set-up, please restart your terminal"
             exit 1
         fi
     fi
@@ -63,11 +79,11 @@ windows-fix-ssh-agent() {
 
 # Check for an existing SSH key, if there isn't one, make one
 ssh-key-setup() {
-    echo "[2521-setup]  Checking for SSH keys..."
+    output "Checking for SSH keys..."
     available_keys="$(ls -l ~/.ssh/id_*.pub)"
 
     if [ ! -n available_keys ]; then
-        echo "[2521-setup]  No SSH keys found, creating one..."
+        output "No SSH keys found, creating one..."
 
         # Generate SSH key
         # https://stackoverflow.com/a/43235320/6335363
@@ -86,10 +102,10 @@ ssh-key-setup() {
 # - Set up SSH key
 # - Uses ssh-copy-id to copy it to CSE systems
 cse-setup () {
-    echo "[2521-setup]  Setting up connection to CSE..."
+    output "Setting up connection to CSE..."
     windows-fix-ssh-agent
 
-    # Get their zID, and save it to `config/zid`
+    # Get their zID, and save it to `home/.zid`
     if [[ ! -f "./home/.zid" ]]; then
         read -p "Enter your zID: " zid
         echo "$zid" > "./home/.zid"
@@ -101,27 +117,27 @@ cse-setup () {
     ssh-key-setup
 
     # Now copy it across to CSE
-    echo "[2521-setup]  Copying SSH key to CSE..."
+    output "Copying SSH key to CSE..."
     ssh-copy-id "$zid@login.cse.unsw.edu.au"
 
     # Finally, link their SSH config to `config/ssh` so it can be used
     # within the docker image
-    echo "[2521-setup]  Linking SSH config to Docker image..."
+    output "Linking SSH config to Docker image..."
     if [[ ! -d "./config/ssh" ]]; then
         # -s = symbolic
         ln -s "$HOME/.ssh" "./config/ssh"
     else
-        echo "./config/ssh already exists, skipping"
+        output "./config/ssh already exists, skipping"
     fi
 }
 
 # Add 2521 scripts to PATH
 add-scripts() {
-    echo "[2521-setup]  Adding 2521 scripts to PATH variable..."
+    output "Adding 2521 scripts to PATH variable..."
     # Only add if not already present
     scripts_path=$(which 2521-setup 2> /dev/null)
     if [[ -n $scripts_path ]]; then
-        echo "[2521-setup]  Scripts already added to PATH variable, skipping"
+        output "Scripts already added to PATH variable, skipping"
         return
     fi
     scripts_dir="$PWD/scripts"
@@ -142,7 +158,7 @@ add-scripts() {
 
 # Set up required directories
 work-setup() {
-    echo "[2521-setup]  Setting up working directories"
+    output "Setting up working directories"
     mkdir -p home
     mkdir -p config
     # Copy across any important files
@@ -160,25 +176,25 @@ main() {
     echo " --- COMP2521 Docker Image setup ---"
 
     # Set up work directory
-    work-setup
+    work-setup &&
 
     # Check environment is ok
-    check-env
+    check-env &&
 
     # Add scripts to PATH
-    add-scripts
+    add-scripts &&
 
     # Set up connection to CSE
-    cse-setup
+    cse-setup &&
 
     # Set up docker image
-    docker-setup
+    docker-setup &&
 
     # Set up VS Code
-    code-setup
+    code-setup &&
 
-    echo "[2521-setup]  Setup completed successfully!"
-    echo "[2521-setup]  Restart your terminal to get the 2521-* commands"
+    output "Setup completed successfully!" &&
+    output "Restart your terminal to get the 2521-* commands"
 }
 
 main
