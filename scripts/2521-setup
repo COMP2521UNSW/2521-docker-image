@@ -164,8 +164,10 @@ work-setup() {
     # Copy across any important files
     # Course bash config
     cp "./dotfiles/dot.bashrc" "./home/.bashrc"
+    chmod +x "./home/.bashrc"
     # Profile config (ensure bashrc executed on login)
     cp "./dotfiles/dot.profile" "./home/.profile"
+    chmod +x "./home/.profile"
 }
 
 
