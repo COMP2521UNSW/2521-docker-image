@@ -15,6 +15,16 @@ if [[ ! -n $containerid ]]; then
     exit 1
 fi
 
+code_path=$(which code 2> /dev/null)
+if [[ ! -n $code_path ]]; then
+    echo "VS Code could not be found in your PATH variable."
+    echo "On MacOS, you may need to run the 'Add code command to PATH' command"
+    echo "By launching VS Code, then pressing Cmd+Shift+P and typing 'path'."
+    echo "For other platforms, please ensure VS Code has been installed, and"
+    echo "is present on your system's PATH variable."
+    exit 1
+fi
+
 # Convert it to hex
 # https://stackoverflow.com/a/46760046/6335363
 hexid=$(echo -n "$containerid" | od -A n -t x1 | sed 's/ *//g')
