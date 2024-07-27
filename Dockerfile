@@ -17,7 +17,7 @@ RUN apt install -y ssh git rsync
 # Build + debug tools
 RUN apt install -y make llvm clang clangd
 # Core programs (installed last, since they are most likely to change)
-RUN apt install -y file less unzip zip time nano
+RUN apt install -y file less unzip zip time nano bat vim
 
 # Copy entrypoint script
 COPY "container-scripts/fix-permissions.sh" "/root/fix-permissions.sh"
